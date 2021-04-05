@@ -1,3 +1,5 @@
+#include <SoftwareSerial.h>
+
 int Pulses1 = 2;         //Arduino digital pin 2 is declared as Pulses1
 int Pulses2 = 3;         //Arduino digital pin 3 is declared as Pulses2
 int Pulses3 = 18;         //Arduino digital pin 18 is declared as Pulses3
@@ -8,17 +10,18 @@ int led2   = 8; //Led pin for led 2
 int led3   = 9; //Led pin for led 3
 int led4   = 10;//Led pin for led 4
 
-
 volatile int pulsecount1; //Variable to count number of pulses1
 volatile int pulsecount2; //Variable to count number of pulses2
 volatile int pulsecount3; //Variable to count number of pulses3
 volatile int pulsecount4; //Variable to count number of pulses4
 
-  
 volatile int i=0;                 //Variable for led1 status 
 volatile int j=0;                 //Variable for led2 status
 volatile int k=0;                 //Variable for led3 status
 volatile int l=0;                 //Variable for led4 status
+
+SoftwareSerial espSerial(5, 6);
+String str;
 
 void setup() {
   //Interrupt pin 2 declared as input and pull up resitor is enabled
@@ -57,7 +60,8 @@ void setup() {
 
   attachInterrupt(digitalPinToInterrupt(Pulses4), CountPulsesFour, FALLING);
   
-  Serial.begin(9600);  //Starting serial monitor
+  Serial.begin(115200);  //Starting serial monitor
+  espSerial.begin(115200);
 }
 void loop() { 
   pulsecount1 = 0;  //Start counting from 0 again
@@ -104,6 +108,9 @@ void loop() {
   Serial.print("Flow rate F4=");       
   Serial.print(flowRate4);   //Print milli liters per minute on serial monitor for 
   Serial.println("mL/minute");  
+
+  str =String("coming from arduino: ")+String("FS1= ")+String(flowRate1)+String("FS2= ")+String(flowRate2)+String("FS3=")+String(flowRate3)+String("FS4=")+String(flowRate4);
+  espSerial.println(str);
 
   Serial.println("");
   
