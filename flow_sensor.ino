@@ -75,7 +75,7 @@ void loop() {
   l=0;             //Reset led4 loggling variable
     
   interrupts();    //Enables interrupt on arduino pin 3
-  delay (2000);    //Wait 1 second 
+  delay (14000);    //Wait 14 second 
   noInterrupts();  //Disable the interrupt
 
  //One second is over now and we have the number of pulses in variable 
@@ -109,8 +109,22 @@ void loop() {
   Serial.print(flowRate4);   //Print milli liters per minute on serial monitor for 
   Serial.println("mL/minute");  
 
-  str =String("coming from arduino: ")+String("FS1= ")+String(flowRate1)+String("FS2= ")+String(flowRate2)+String("FS3=")+String(flowRate3)+String("FS4=")+String(flowRate4);
-  espSerial.println(str);
+//  String apiKey = "ZKL44QBFSYWBACV4";
+  String apiKey = "ADLQP7NSFIPD3SPW";
+  
+  String postStr = apiKey;
+    postStr +="&field1=";
+    postStr += String(flowRate1);
+    postStr +="&field2=";
+    postStr += String(flowRate2);
+    postStr +="&field3=";
+    postStr += String(flowRate3);
+    postStr +="&field4=";
+    postStr += String(flowRate4);    
+    postStr += "\r\n\r\n";
+
+  //str =String("coming from arduino: ")+String("FS1= ")+String(flowRate1)+String("FS2= ")+String(flowRate2)+String("FS3=")+String(flowRate3)+String("FS4=")+String(flowRate4);
+  espSerial.println(postStr);
 
   Serial.println("");
   
